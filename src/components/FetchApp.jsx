@@ -1,0 +1,52 @@
+import { useEffect } from "react"
+import { useFetch } from "../hooks/useFetch"
+
+export const FetchApp = () => {
+
+    const baseURL = 'https://jsonplaceholder.typicode.com/users'
+
+    const { data, isLoading, error, fetchData } = useFetch()
+
+    useEffect(() => {
+      fetchData(baseURL, 'GET')
+    }, [baseURL])
+    
+
+    const userTableDisplay = data?.map(user => (
+        <tr key={user.id}>
+            <th scope="row">{user.id}</th>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.website}</td>
+        </tr>
+    ))
+
+  return (
+    <div className="mt-5 ms-5">
+
+        <h2>Lista de usuarios: </h2>
+
+        {
+            isLoading
+            ? <h4>Cargando...</h4>
+            : error
+                ? <h4>Ha ocurrido un error: {error.message}</h4>
+                :
+                <table className="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Website</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {userTableDisplay}
+                    </tbody>
+                </table>  
+        }
+    </div>
+  )
+}
